@@ -1,0 +1,23 @@
+# audio — never commit masters
+*.wav
+*.flac
+*.mp3
+*.aif
+*.aiff
+*.ogg
+
+# generated
+output/
+__pycache__/
+*.pyc
+
+# env
+.venv/
+venv/
+.env
+
+# os / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
