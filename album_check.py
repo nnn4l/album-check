@@ -12,7 +12,7 @@ import measure
 def main(folder_path):
     tracks = list(measure.scan_folder(folder_path))
     for track in tracks:
-        print(track["name"])
+        print(track["name"], track["integrated_LUFS"], track["sample_peak"], track["true_peak"])
 
 if __name__ == "__main__":
     folder_path = "C:\\Dev\\album-check\\masters"
