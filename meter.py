@@ -8,3 +8,22 @@ def k_weight(x):
 
     shelved = scipy.signal.lfilter(SHELF_B, SHELF_A, x, axis=0)
     return scipy.signal.lfilter(HP_B, HP_A, shelved, axis=0)
+
+def integrated_lufs(x, rate):
+    y = k_weight(x)
+    block = int(0.4 * rate)
+    Z = []
+    start = 0
+    hop = int(0.1 * rate)
+    while start + block < len(y):
+        chunk = y[start:start + block]
+        Z.append(numpy.mean(chunk ** 2, axis=0))
+        start += hop
+    Z = numpy.array(Z)
+
+    power = Z.sum(axis=1)
+    lj = -0.691 + 10 * numpy.log10(power)
+    abs_mask = lj > -70
+    gamma = -0.691 + 10 * numpy.log10(Z[abs_mask].mean(axis=0).sum()) - 10
+    mask = abs_mask & (lj > gamma)
+    return -0.691 + 10 * numpy.log10(Z[mask].mean(axis=0).sum())
